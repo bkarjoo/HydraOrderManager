@@ -3,14 +3,14 @@ from HAPIExecutionServer import HAPIExecutionServer
 
 class HydraOrderManager(OrderManager):
 
-    def __init__(self, autostart = True):
+    def __init__(self, port=10000, autostart = True):
         super(HydraOrderManager, self).__init__()
         self.es_server = 0
         if autostart:
-            self.open_socket()
+            self.open_socket(port)
 
-    def open_socket(self):
-        self.es_server = HAPIExecutionServer()
+    def open_socket(self, port):
+        self.es_server = HAPIExecutionServer(port)
 
     def close_socket(self):
         self.es_server.close_es_socket()

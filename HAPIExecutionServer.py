@@ -8,8 +8,8 @@ from HydraMessageUtility import HydraMessageUtility
 
 class HAPIExecutionServer(object):
 
-    def __init__(self):
-        es_server_address = ('localhost', 10000)
+    def __init__(self, port=10000):
+        es_server_address = ('localhost', port)
         self.es_msg_count = 0
         self.es_listener_thread = 0
         self.es_processor_thread = 0
@@ -40,7 +40,9 @@ class HAPIExecutionServer(object):
                 o = self.orders.get_order_by_id(tokens[8])
                 if o is not None:
                     o.update_order(tokens)
-                pass
+                else:
+                    # it is currently being ignored
+                    pass
             elif tokens[4] == 'F':
                 # find order by parent id
 
@@ -49,7 +51,9 @@ class HAPIExecutionServer(object):
                     o.order_id = tokens[9]
                     self.orders.add_order_by_id(tokens[9], o)
                     o.update_order(tokens)
-                pass
+                else:
+                    # it's currently being ignored
+                    pass
 
     def es_socket_listener(self):
         while True:

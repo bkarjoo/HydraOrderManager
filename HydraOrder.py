@@ -24,9 +24,9 @@ class HydraOrder(Order):
             self.quantity, self.order_price, self.contra, self.channel_of_execution,
             self.tif, self.type, self.display)
 
-    def change_status(self, stat):
+    def change_status(self, stat, token_list = []):
         self.status = stat
-        self.statusChangeNotifier.notifyObservers(self)
+        self.statusChangeNotifier.notifyObservers((self, token_list))
 
     def update_order(self, tokens):
         if tokens[2] != 'S':
@@ -43,9 +43,9 @@ class HydraOrder(Order):
                 self.execution_list.append(t)
                 self.leaves_qty = int(tokens[20])
                 if self.leaves_qty == 0:
-                    self.change_status(order_status_type.executed)
+                    self.change_status(order_status_type.executed, tokens)
                 else:
-                    self.change_status(order_status_type.partial_open)
+                    self.change_status(order_status_type.partial_open, tokens)
             elif tokens[14] == msg_status_type.open:
                 # can be unfilled order or partial
                 self.leaves_qty = int(tokens[20])
