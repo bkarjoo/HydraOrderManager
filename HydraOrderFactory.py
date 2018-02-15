@@ -9,6 +9,7 @@ class HydraOrderFactory(OrderFactory):
         super(HydraOrderFactory, self).__init__()
         self.id_generator = OrderIdGenerator()
 
+    # CSFB limit order on cross finder
     def generate_limit_order(self, qty, symbol, price, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -31,6 +32,31 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # NITE limit order
+    def generate_limit_nite_order(self, qty, symbol, price, acct):
+        if type(qty) != int:
+            qty = int(qty)
+        o = HydraOrder()
+        o.account = acct
+        o.quantity = abs(qty)
+        o.symbol = symbol
+        o.order_price = price
+        o.tif = tif_type.day
+        o.type = order_type.limit
+        o.parent_id = self.id_generator.generate_order_id()
+        o.display = 'Y'
+        o.security_type = '8'
+        o.security_id = symbol
+        o.reserve_size = ''
+        if qty > 0:
+            o.side = side_type.buy
+        elif qty < 0:
+            o.side = side_type.sell
+        o.channel_of_execution = 'NITE'
+        o.set_nite_limit()
+        return o
+
+    # CSFB MOO order
     def generate_opg_market_order(self, qty, symbol, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -52,6 +78,7 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # CSFB MOC order
     def generate_moc_market_order(self, qty, symbol, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -73,6 +100,7 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # CSFB LOO order
     def generate_opg_limit_order(self, qty, symbol, price, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -95,6 +123,7 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # CSFB LOC order
     def generate_loc_limit_order(self, qty, symbol, price, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -117,6 +146,7 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # NITE VWAP order
     def generate_nite_vwap_order(self, qty, symbol, start_time, end_time, stop_price, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -139,6 +169,7 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # CSFB STOP LIMIT
     def generate_stop_limit_order(self, qty, symbol, stop_price, stop_limit, acct):
         if type(qty) != int:
             qty = int(qty)
@@ -162,6 +193,7 @@ class HydraOrderFactory(OrderFactory):
             o.side = side_type.sell
         return o
 
+    # CSFB STOP MARKET
     def generate_stop_market_order(self, qty, symbol, stop_price, acct):
         if type(qty) != int:
             qty = int(qty)

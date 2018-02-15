@@ -10,6 +10,9 @@ class HydraOrder(Order):
     def set_nite_vwap(self, start_time, end_time, stop_price):
         self.algo_fields = "4,{0},{1},,,{2},N,N,100,,,N,N,0".format(start_time, end_time, stop_price)
 
+    def set_nite_limit(self):
+        self.algo_fields = "1,,,,,,N,N,100,,,N,N,0"
+
     def craft_message(self):
         return "#:00000:N:000:{0}:{1}:{2}:N:{3}:{4}:{5}:{6}:{7}:{8}:{9}::{10}::{11}:{18}:{13}:{12}:{14}:{15}:{16}:{17}::::*".format(
             self.account, self.parent_id, self.order_id, self.symbol, self.side,
